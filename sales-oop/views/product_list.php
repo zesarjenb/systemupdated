@@ -86,10 +86,6 @@ $product_list = $product->displayProducts();
             border-bottom: none;
         }
 
-        .card-header h1 {
-            color: #7b4a22; /* Dark roasted brown */
-        }
-
         .table thead {
             background-color: #7b4a22; /* Dark roasted brown header */
             color: white;
@@ -136,10 +132,6 @@ $product_list = $product->displayProducts();
             box-shadow: 0 0 5px rgba(226, 114, 37, 0.5);
         }
 
-        .btn-close {
-            background-color: white;
-        }
-
         .no-records {
             background: #f8d7da; /* Light Red Background for no records */
             border: 1px solid #f5c6cb;
@@ -166,27 +158,23 @@ $product_list = $product->displayProducts();
         <div class="container mt-5">
             <div class="card w-100 mx-auto shadow-lg border-0" style="max-width: 1200px;">
                 <div class="card-header bg-white border-0">
-                    <div class="row align-items-center">
-                        <div class="col text-start">
-                            <h1 class="display-6 fw-bold">Product List</h1>
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col-auto text-align">
+                            <h4 class="text-dark">Manage Your Products</h4>
                         </div>
-                        <div class="col text-end">
-                            <i class="fa-solid fa-plus fa-3x text-info" data-bs-toggle="modal" data-bs-target="#add-product" style="cursor: pointer;"></i>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-plus fa-2x text-info" data-bs-toggle="modal" data-bs-target="#add-product" style="cursor: pointer;" title="Add Product"></i>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body">
-                    <?php
-                        if(empty($product_list)){
-                    ?>
+                    <?php if(empty($product_list)): ?>
                         <div class="container-fluid p-5 text-center no-records">
                             <h1 class="display-6 fw-bold pt-5 pb-3">No Records Found</h1>
                             <i class="fa-regular fa-circle-xmark fa-8x pb-5"></i>
                         </div>
-                    <?php
-                        } else {
-                    ?>
+                    <?php else: ?>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -197,36 +185,29 @@ $product_list = $product->displayProducts();
                                 <th>Actions</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            <?php
-                                foreach($product_list as $product){
-                            ?>
-                                    <tr>
-                                        <td><?= $product['id']?></td>
-                                        <td><?= $product['product_name']?></td>
-                                        <td>₱<?= number_format($product['price'], 2)?></td>
-                                        <td><?= $product['quantity']?></td>
-                                        <td>
-                                            <a href="edit-product.php?product_id=<?= $product['id'] ?>" class="btn btn-sm btn-custom" title="Edit Product"><i class="fa-solid fa-pen"></i></a>
-                                            <a href="../actions/delete-product.php?product_id=<?= $product['id'] ?>" class="btn btn-sm btn-danger" title="Delete Product"><i class="fa-solid fa-trash"></i></a>
-                                            <a href="buy-product.php?product_id=<?= $product['id'] ?>" class="btn btn-sm btn-success" title="List as Sold"><i class="fa-solid fa-check"></i> </a>
-                                        </td>
-                                    </tr>
-                            <?php
-                                }
-                            ?>
+                            <?php foreach($product_list as $product): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($product['id']) ?></td>
+                                    <td><?= htmlspecialchars($product['product_name']) ?></td>
+                                    <td>₱<?= number_format($product['price'], 2) ?></td>
+                                    <td><?= htmlspecialchars($product['quantity']) ?></td>
+                                    <td>
+                                        <a href="edit-product.php?product_id=<?= $product['id'] ?>" class="btn btn-sm btn-custom" title="Edit Product"><i class="fa-solid fa-pen"></i></a>
+                                        <a href="../actions/delete-product.php?product_id=<?= $product['id'] ?>" class="btn btn-sm btn-danger" title="Delete Product"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="buy-product.php?product_id=<?= $product['id'] ?>" class="btn btn-sm btn-success" title="List as Sold"><i class="fa-solid fa-check"></i></a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <?php
-                        }
-                    ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
 
         <!-- ADD PRODUCT MODAL -->
-        <div class="modal fade" id="add-product" tabindex="-1" aria-labelledby="registration" aria-hidden="true">
+        <div class="modal fade" id="add-product" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -238,13 +219,10 @@ $product_list = $product->displayProducts();
 
                     <div class="modal-body p-5">
                         <form action="../actions/product-actions.php" method="post" class="w-75 mx-auto">
-                            <!-- Product Name Field -->
                             <div class="mb-4">
                                 <label for="product-name" class="form-label text-secondary fw-semibold">Product Name</label>
                                 <input type="text" name="product_name" id="product-name" class="form-control" required>
                             </div>
-
-                            <!-- Price and Quantity Fields -->
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <label for="price" class="form-label text-secondary fw-semibold">Price</label>
@@ -258,8 +236,6 @@ $product_list = $product->displayProducts();
                                     <input type="number" name="quantity" id="quantity" class="form-control" required>
                                 </div>
                             </div>
-
-                            <!-- Submit Button -->
                             <div class="text-center">
                                 <button type="submit" class="btn btn-custom px-5 rounded-pill" name="add_product">
                                     <i class="fa-solid fa-plus me-2"></i> Add Product
